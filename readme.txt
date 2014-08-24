@@ -3,8 +3,8 @@ Contributors: shambhu patnaik
 Donate link: http://socialcms.wordpress.com/
 Tags: Beyond job importer,Beyond,import Beyond,Beyond api,makes auto blogging,auto blogging,job board,auto job import,Beyond rss,Beyond importer,beyond affiliate,affiliate
 Requires at least: 2.9
-Tested up to: 3.9
-Stable tag: 1.0
+Tested up to: 3.9.2
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -60,7 +60,12 @@ More detail : http://socialcms.wordpress.com/
 
 == Changelog ==
 
-N/A
+= 1.1 =
+* Fix WPMU cron error
+* improve duplicate job check
+
+= 1.0 =
+* Initial release
 
 == Upgrade Notice ==
 

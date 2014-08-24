@@ -3,7 +3,7 @@
 Plugin Name: Beyond Job Importer
 Plugin URI: http://wordpress.org/extend/plugins/beyond-job-importer/
 Description: Beyond Job Importer Plugin Import job from Beyond api according to your given parameter.,post in relevant category,makes autoblogging
-Version: 1.0
+Version: 1.1
 Author: Shambhu Prasad Patnaik
 Author URI:http://socialcms.wordpress.com/
 */
@@ -14,7 +14,7 @@ if (!function_exists('beyond_job_importer_add_menus')) :
 function beyond_job_importer_add_menus()
 {
  add_menu_page('Beyond Importer', 'Beyond Importer', 8, __FILE__, 'beyond_job_importer_list');
- add_submenu_page(__FILE__, 'Add Imporder', 'Add Imporder', 8, 'beyond_job_importer','beyond_job_importer');
+ add_submenu_page(__FILE__, 'Add Importer', 'Add Imporder', 8, 'beyond_job_importer','beyond_job_importer');
  add_submenu_page(__FILE__, 'Help', 'Help', 8, 'beyond_job_importer_help','beyond_job_importer_help');
 }
 endif;
@@ -103,9 +103,10 @@ function beyond_job_importer_list()
 		 <li><a href="http://wordpress.org/plugins/beyond-job-importer/" target="_blank">Beyond Job Importer</a></li>
 		 <li><a href="http://socialcms.wordpress.com/contact-us/" target="_blank">Pro Indeed Job Importer (premium version)</a></li>
 		 <li><a href="http://socialcms.wordpress.com/2014/03/15/wp-job-manager-indeed-job-importer/" target="_blank">WP Job Manager Indeed Job Importer</a></li>
+		 <li><a href="http://socialcms.wordpress.com/2014/07/02/authenticjobs-job-importer/" target="_blank">AuthenticJobs Job Importer</a></li>
 		 <li><a href="http://socialcms.wordpress.com/2014/01/21/careerbuilder-job-importer/" target="_blank">CareerBuilder Job Importer</a></li>
-		 <li><a href="http://socialcms.wordpress.com/contact-us/" target="_blank">CareerJet Job Importer</a></li>
-		 <li><a href="http://socialcms.wordpress.com/contact-us/" target="_blank">SimplyHired Job Importer</a></li>
+		 <li><a href="http://socialcms.wordpress.com/2014/02/07/careerjet-job-importer/" target="_blank">CareerJet Job Importer</a></li>
+		 <li><a href="http://socialcms.wordpress.com/2014/03/05/simplyhired-job-importer/" target="_blank">SimplyHired Job Importer</a></li>
 		 <li><a href="http://socialcms.wordpress.com/category/job-board-2/" target="_blank">Job Board</a></li>
 		<ul>
 	</div>   

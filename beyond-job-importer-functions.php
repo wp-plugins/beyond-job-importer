@@ -248,19 +248,26 @@ function beyond_job_importer_feed_import($feed_ids='',$current_time='')
  global $wpdb;
  $beyond_job_importer_dbtable = $wpdb->base_prefix . "beyond_job_importer";	
  $add_whereClause='';
- $blog_id = get_current_blog_id();
- $add_whereClause=" and  y.blog_id = '".$blog_id."' ";
-
+ 
  if($feed_ids!='')
- $add_whereClause=" and  y.feed_id in (".$feed_ids.") ";
+ $add_whereClause.=" and  y.feed_id in (".$feed_ids.") ";
 
  if($current_time!='')
- $add_whereClause=" and  y.next_activate <= '".$wpdb->escape($current_time)."'";
+ $add_whereClause.=" and  y.next_activate <= '".$wpdb->escape($current_time)."'";
  
  $query = "select y.* from ".$beyond_job_importer_dbtable."  as y  where y.status='active' $add_whereClause   order by y.feed_id";
  $records = $wpdb->get_results($query,'ARRAY_A');
  foreach ($records as $row)
  {
+  $blog_id          = wp_filter_nohtml_kses($row['blog_id']);
+  $switch = false;
+  if (function_exists('is_multisite') && is_multisite())
+  {
+   if ( get_current_blog_id() != $blog_id ) {
+    $switch = true;
+    switch_to_blog( $blog_id );
+   }
+  }
   $affiliate_id     = wp_filter_nohtml_kses($row['affiliate_id']);
   $feed_keyword     = wp_filter_nohtml_kses($row['feed_keyword']);
   $feed_country     = wp_filter_nohtml_kses($row['feed_country']);
@@ -289,8 +296,8 @@ function beyond_job_importer_feed_import($feed_ids='',$current_time='')
   {
    $error          = false;
    $item_title     = wp_filter_nohtml_kses($content[$i]['title']);
-   $item_url       = wp_filter_nohtml_kses($content[$i]['url']);
-   
+   $item_id        = wp_filter_nohtml_kses($content[$i]['job_id']);
+   $item_url       = wp_filter_nohtml_kses($content[$i]['url']);   
    $item_job_city  = wp_filter_nohtml_kses($content[$i]['city']);
    $item_job_state = wp_filter_nohtml_kses($content[$i]['state']);
    $item_location  = wp_filter_nohtml_kses($content[$i]['location']);
@@ -304,7 +311,7 @@ function beyond_job_importer_feed_import($feed_ids='',$current_time='')
    {
     $error=true;
    }
-   elseif($result1=$wpdb->get_var($wpdb->prepare("select post_title FROM $wpdb->posts 	WHERE post_title = '%s'",$item_title)))
+   elseif($result1=$wpdb->get_var($wpdb->prepare("select post_title FROM $wpdb->posts  INNER JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id) WHERE    meta_key = '_beyond_id' AND meta_value='%s'",$item_id)))
    {
     $error=true;
    }  
@@ -361,6 +368,7 @@ function beyond_job_importer_feed_import($feed_ids='',$current_time='')
     {
 	 wp_set_post_terms( $post_ID, $wp_category, 'category');
      update_post_meta($post_ID,'source','beyond');	
+ 	 update_post_meta($post_ID,'_beyond_id',$item_id);	
  	 if($item_location!='')
      update_post_meta($post_ID,'job_location',$item_location);	
 	 $import_count=$import_count+1;
@@ -371,6 +379,8 @@ function beyond_job_importer_feed_import($feed_ids='',$current_time='')
   $next_activate = beyond_job_importer_next_runtime($occurrence,$occurrence_type,current_time('mysql'));
   $query="update ".$beyond_job_importer_dbtable." set  last_import='".$import_count."',import_items='".$import_items."',last_active='".current_time('mysql')."',next_activate='".$next_activate."'  where feed_id='".$feed_id."'"; 
   $results = $wpdb->query($query);
+  if($switch)
+  restore_current_blog();
  }
 }
 endif;
@@ -397,6 +407,7 @@ function beyondJobImporterReadFeeds($url)
    if($parsed_xml->Item)
    foreach($parsed_xml->Item as $current)
    {
+     $job_id       =  wp_filter_nohtml_kses($current->SourceInformationID); 
      $job_title    =  wp_filter_nohtml_kses($current->Title); 
      $job_company  =  wp_filter_nohtml_kses($current->CompanyName); 
      $job_location =  wp_filter_nohtml_kses($current->Location); 
@@ -405,6 +416,7 @@ function beyondJobImporterReadFeeds($url)
 
      
      $beyond_content[$i]=array(
+                        'job_id'     => $job_id,
                         'title'      => $job_title,
                         'company'    => $job_company,
                         'post_code'  => $job_postal,
