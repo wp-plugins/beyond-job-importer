@@ -3,7 +3,7 @@ Contributors: shambhu patnaik
 Donate link: http://socialcms.wordpress.com/
 Tags: Beyond job importer,Beyond,import Beyond,Beyond api,makes auto blogging,auto blogging,job board,auto job import,Beyond rss,Beyond importer,beyond affiliate,affiliate
 Requires at least: 2.9
-Tested up to: 4.1
+Tested up to: 4.2.1
 Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
